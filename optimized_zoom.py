@@ -10,6 +10,7 @@ def print_shapes(input, factors):
     out_shape = np.multiply(input.shape, factors)
     print(f" Going from {in_shape} --> {out_shape}")
 
+
 def timer_func(func):
     # This function shows the execution time of 
     # the function object passed
@@ -49,6 +50,15 @@ def generate_small_bias(spacing):
 def bias_scipy_zoom(small_bias, factors):
     bias_field = np.exp(zoom(small_bias, factors, order=1))
     return bias_field
+
+
+@timer_func
+def def_scipy_zoom(small_bias, factors):
+    out_shape = np.multiply(small_bias.shape[:-1], factors)
+    def_field = np.zeros(list(out_shape) + [3])
+    for i in range(3):
+        def_field[...,i] = zoom(small_bias[...,i], factors, order=1)
+    return def_field
 
 
 @timer_func
@@ -222,10 +232,6 @@ def def_prod_zoom(small_bias, factors):
     
     return I
 
-@timer_func
-def def_scipy_zoom():
-    pass
-
 
 @timer_func
 def def_jei(small_def, factors):
@@ -302,6 +308,8 @@ if __name__ == '__main__':
         print()
 
         small_def = np.stack([small_bias, small_bias, small_bias], axis=-1)
+        
+        def_field_scipy = def_scipy_zoom(small_def, bias_factors)
         def_field_jei = def_jei(small_def, bias_factors)
         def_field_prod = def_prod_zoom(small_def, bias_factors)
         def_field_prod1 = bias_prod_zoom(small_def, bias_factors, 'def')
