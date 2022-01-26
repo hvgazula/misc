@@ -1,6 +1,9 @@
+import os
+from time import time
+
+import nibabel as nib
 import numpy as np
 from scipy.ndimage import zoom
-from time import time
 from tabulate import tabulate
 
 LABELS_SHAPE = [256, 256, 256]
@@ -13,19 +16,20 @@ def print_shapes(input, factors):
 
 
 def timer_func(func):
-    # This function shows the execution time of 
+    # This function shows the execution time of
     # the function object passed
     def wrap_func(*args, **kwargs):
         t1 = time()
         result = func(*args, **kwargs)
         t2 = time()
-        print(f'\tFunction {func.__name__!r:20}: {(t2-t1):.4f}s     Sum: {np.sum(result)}')
+        # print(f'\tFunction {func.__name__!r:20}: {(t2-t1):.4f}s     Sum: {np.sum(result)}')
         return result
+
     return wrap_func
 
 
 def generate_small_def(spacing):
-    nonlin_shape_factor = [0.0625, 1/spacing, 0.0625]
+    nonlin_shape_factor = [0.0625, 1 / spacing, 0.0625]
 
     def_field = None
     factors = None
@@ -34,12 +38,12 @@ def generate_small_def(spacing):
 
 
 def generate_small_bias(spacing):
-    bias_shape_factor = [0.025, 1/spacing, 0.025]
+    bias_shape_factor = [0.025, 1 / spacing, 0.025]
     bias_field_std = 0.5
 
-    small_bias_size = np.ceil(
-        np.multiply(LABELS_SHAPE, bias_shape_factor)).astype(np.int)
-    
+    small_bias_size = np.ceil(np.multiply(LABELS_SHAPE,
+                                          bias_shape_factor)).astype(np.int)
+
     small_bias = bias_field_std * np.random.uniform(
         size=[1]) * np.random.normal(size=small_bias_size)
     factors = np.floor_divide(LABELS_SHAPE, small_bias_size)
@@ -58,7 +62,7 @@ def def_scipy_zoom(small_bias, factors):
     out_shape = np.multiply(small_bias.shape[:-1], factors)
     def_field = np.zeros(list(out_shape) + [3])
     for i in range(3):
-        def_field[...,i] = zoom(small_bias[...,i], factors, order=1)
+        def_field[..., i] = zoom(small_bias[..., i], factors, order=1)
     return def_field
 
 
@@ -132,10 +136,12 @@ def bias_einsum_zoom(small_bias, factors):
         w2 = Xs_prime - f
         w1 = 1 - w2
 
-        summand1 = np.einsum(f'{letter[idx]}, ijk->ijk', w1, np.take(I, f, idx))
-        summand2 = np.einsum(f'{letter[idx]}, ijk->ijk', w2, np.take(I, c, idx))
+        summand1 = np.einsum(f'{letter[idx]}, ijk->ijk', w1,
+                             np.take(I, f, idx))
+        summand2 = np.einsum(f'{letter[idx]}, ijk->ijk', w2,
+                             np.take(I, c, idx))
         I = summand1 + summand2
-    
+
     return np.exp(I)
 
 
@@ -163,11 +169,11 @@ def einsum_zoom(small_bias, factors, flag='bias'):
             ein_str = f'{letter[idx]}, ijk->ijk'
         else:
             ein_str = f'{letter[idx]}, ijkl->ijkl'
-        
+
         summand1 = np.einsum(ein_str, w1, np.take(I, f, idx))
         summand2 = np.einsum(ein_str, w2, np.take(I, c, idx))
         I = summand1 + summand2
-    
+
     if flag == 'def':
         return I
     else:
@@ -201,11 +207,12 @@ def prod_zoom(small_bias, factors, flag='bias'):
         summand1 = np.expand_dims(w1, my_list) * np.take(I, f, idx)
         summand2 = np.expand_dims(w2, my_list) * np.take(I, c, idx)
         I = summand1 + summand2
-    
+
     if flag == 'def':
         return I
     else:
         return np.exp(I)
+
 
 @timer_func
 def def_prod_zoom(small_bias, factors):
@@ -227,7 +234,7 @@ def def_prod_zoom(small_bias, factors):
         summand1 = np.expand_dims(w1, my_list) * np.take(I, f, idx)
         summand2 = np.expand_dims(w2, my_list) * np.take(I, c, idx)
         I = summand1 + summand2
-    
+
     return I
 
 
@@ -295,7 +302,7 @@ def print_absolute_diff_table(some_list, header):
 
     for i, elem1 in enumerate(some_list):
         for j, elem2 in enumerate(some_list):
-            def_diff[i, j] = np.sum(np.abs(elem1- elem2))
+            def_diff[i, j] = np.sum(np.abs(elem1 - elem2))
 
     def_diff = zip(header, def_diff.tolist())
     def_diff = [[i, *j] for (i, j) in def_diff]
@@ -305,33 +312,55 @@ def print_absolute_diff_table(some_list, header):
     print()
 
 
+def save_images(some_list, idx, header, spacing, flag=None):
+    img = nib.load('/usr/local/freesurfer/dev/subjects/bert/mri/nu.mgz')
+    for item, hdr_tag in zip(some_list, header):
+        img1 = nib.Nifti1Image(item, img.affine, img.header)
+        file_name = f'{hdr_tag}_S{spacing:02}-R{idx:02}.nii.gz'
+        nib.save(img1, os.path.join(os.getcwd(), 'images', flag, file_name))
+
+
 if __name__ == '__main__':
     header = ["scipy", "for_loop", "multiply", "einsum"]
+    os.makedirs(os.path.join(os.getcwd(), 'images', 'bias'), exist_ok=True)
+    os.makedirs(os.path.join(os.getcwd(), 'images', 'deformation'),
+                exist_ok=True)
 
     print(f'Labels Shape is: {LABELS_SHAPE}\n')
-    
+
     for spacing in [2, 6, 8, 10, 12]:
-        print(f'Spacing = {spacing}', end=' ')
-        
-        small_bias, bias_factors = generate_small_bias(spacing)
-        print_shapes(small_bias, bias_factors)
-        
-        bias_field_scipy = bias_scipy_zoom(small_bias, bias_factors)
-        bias_field_jei = bias_jei_zoom(small_bias, bias_factors)
-        bias_field_einsum = bias_einsum_zoom(small_bias, bias_factors)
-        bias_field_prod = prod_zoom(small_bias, bias_factors)
+        for test in range(5):
+            print(f'Test Run: {test}')
+            print(f'Spacing = {spacing}', end=' ')
 
-        def_list = [bias_field_scipy, bias_field_jei, bias_field_einsum, bias_field_prod]
-        print_absolute_diff_table(def_list, header)
+            small_bias, bias_factors = generate_small_bias(spacing)
 
-        small_def = np.stack([small_bias, small_bias, small_bias], axis=-1)
-        
-        def_field_scipy = def_scipy_zoom(small_def, bias_factors)
-        def_field_jei = def_jei_zoom(small_def, bias_factors)
-        def_field_einsum = einsum_zoom(small_def, bias_factors, 'def')
-        def_field_prod = prod_zoom(small_def, bias_factors, 'def')
+            if test == 0:
+                print_shapes(small_bias, bias_factors)
 
-        def_list = [def_field_scipy, def_field_jei, def_field_einsum, def_field_prod]
-        print_absolute_diff_table(def_list, header)
-        
+            bias_result_list = []
+            for func in [
+                    bias_scipy_zoom, bias_jei_zoom, einsum_zoom, prod_zoom
+            ]:
+                result = func(small_bias, bias_factors)
+                bias_result_list.append(result)
 
+            if test == 0:
+                print_absolute_diff_table(bias_result_list, header)
+
+            small_def = np.stack([small_bias, small_bias, small_bias], axis=-1)
+
+            def_field_scipy = def_scipy_zoom(small_def, bias_factors)
+            def_field_jei = def_jei_zoom(small_def, bias_factors)
+            def_field_einsum = einsum_zoom(small_def, bias_factors, 'def')
+            def_field_prod = prod_zoom(small_def, bias_factors, 'def')
+
+            def_list = [
+                def_field_scipy, def_field_jei, def_field_einsum,
+                def_field_prod
+            ]
+            if test == 0:
+                print_absolute_diff_table(def_list, header)
+
+            save_images(bias_result_list, test, header, spacing, 'bias')
+            save_images(def_list, test, header, spacing, 'deformation')
