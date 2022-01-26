@@ -1,106 +1,57 @@
 Labels Shape is: [256, 256, 256]
-Spacing = 2  Going from (7, 128, 7) --> [252 256 252]
-	Function 'bias_scipy_zoom': 0.9404s
-	Function 'bias_jei_zoom': 0.4809s
-	Function 'bias_einsum_zoom': 0.5535s
-	Function 'bias_prod_zoom': 0.5144s
-check sum of final matrix
-1: 16464932.789746203
-2: 16466879.72277965
-3: 16466879.72277965
-4: 16466879.72277965
 
-	Function 'def_jei': 1.3330s
-	Function 'def_prod_zoom': 1.2362s
-	Function 'bias_prod_zoom': 1.2302s
-	Function 'einsum_zoom': 1.2331s
-check sum of final matrix
-1: -100384.93870781049
-2: -100384.93870781049
-3: -100384.93870781049
-3: -100384.93870781049
+Spacing = 2  Going from (7, 128, 7) --> [252 256 252]
+	Function 'bias_scipy_zoom'   : 0.9204s     Sum: 16580706.462415617
+	Function 'bias_jei_zoom'     : 0.4612s     Sum: 16681153.654968832
+	Function 'bias_einsum_zoom'  : 0.4784s     Sum: 16681153.654968832
+	Function 'bias_prod_zoom'    : 0.4465s     Sum: 16681153.654968832
+
+	Function 'def_jei'           : 1.2749s     Sum: -45447.88393368692
+	Function 'def_prod_zoom'     : 1.0620s     Sum: -45447.88393368692
+	Function 'bias_prod_zoom'    : 1.2481s     Sum: -45447.88393368692
+	Function 'einsum_zoom'       : 1.2607s     Sum: -45447.88393368692
 
 Spacing = 6  Going from (7, 43, 7) --> [252 215 252]
-	Function 'bias_scipy_zoom': 0.8185s
-	Function 'bias_jei_zoom': 0.4276s
-	Function 'bias_einsum_zoom': 0.5086s
-	Function 'bias_prod_zoom': 0.4502s
-check sum of final matrix
-1: 13678772.987383373
-2: 13661248.699331595
-3: 13661248.699331595
-4: 13661248.699331595
+	Function 'bias_scipy_zoom'   : 0.8682s     Sum: 13707818.567893617
+	Function 'bias_jei_zoom'     : 0.3979s     Sum: 13685490.695174655
+	Function 'bias_einsum_zoom'  : 0.4318s     Sum: 13685490.695174655
+	Function 'bias_prod_zoom'    : 0.3820s     Sum: 13685490.695174655
 
-	Function 'def_jei': 1.0319s
-	Function 'def_prod_zoom': 0.9841s
-	Function 'bias_prod_zoom': 1.0232s
-	Function 'einsum_zoom': 1.0250s
-check sum of final matrix
-1: -5270.625825037996
-2: -5270.625825037996
-3: -5270.625825037996
-3: -5270.625825037996
+	Function 'def_jei'           : 1.0029s     Sum: -223705.64120287567
+	Function 'def_prod_zoom'     : 0.8342s     Sum: -223705.64120287567
+	Function 'bias_prod_zoom'    : 0.8324s     Sum: -223705.64120287567
+	Function 'einsum_zoom'       : 0.9398s     Sum: -223705.64120287567
 
 Spacing = 8  Going from (7, 32, 7) --> [252 256 252]
-	Function 'bias_scipy_zoom': 0.9711s
-	Function 'bias_jei_zoom': 0.5167s
-	Function 'bias_einsum_zoom': 0.6024s
-	Function 'bias_prod_zoom': 0.5663s
-check sum of final matrix
-1: 16295089.94864245
-2: 16313360.73670953
-3: 16313360.73670953
-4: 16313360.73670953
+	Function 'bias_scipy_zoom'   : 1.0023s     Sum: 16535336.982668933
+	Function 'bias_jei_zoom'     : 0.5315s     Sum: 16609433.450602526
+	Function 'bias_einsum_zoom'  : 0.6126s     Sum: 16609433.450602526
+	Function 'bias_prod_zoom'    : 0.5696s     Sum: 16609433.450602526
 
-	Function 'def_jei': 1.3542s
-	Function 'def_prod_zoom': 1.1907s
-	Function 'bias_prod_zoom': 1.1860s
-	Function 'einsum_zoom': 1.2133s
-check sum of final matrix
-1: -124230.24102698166
-2: -124230.24102698166
-3: -124230.24102698166
-3: -124230.24102698166
+	Function 'def_jei'           : 1.3623s     Sum: -409951.2375319193
+	Function 'def_prod_zoom'     : 1.0666s     Sum: -409951.2375319193
+	Function 'bias_prod_zoom'    : 1.1177s     Sum: -409951.2375319193
+	Function 'einsum_zoom'       : 1.0271s     Sum: -409951.2375319193
 
 Spacing = 10  Going from (7, 26, 7) --> [252 234 252]
-	Function 'bias_scipy_zoom': 0.8870s
-	Function 'bias_jei_zoom': 0.4755s
-	Function 'bias_einsum_zoom': 0.5490s
-	Function 'bias_prod_zoom': 0.5117s
-check sum of final matrix
-1: 14968355.281390235
-2: 14944187.312420396
-3: 14944187.312420396
-4: 14944187.312420396
+	Function 'bias_scipy_zoom'   : 0.8453s     Sum: 15223312.155208698
+	Function 'bias_jei_zoom'     : 0.4264s     Sum: 15370373.96262874
+	Function 'bias_einsum_zoom'  : 0.4982s     Sum: 15370373.96262874
+	Function 'bias_prod_zoom'    : 0.4684s     Sum: 15370373.96262874
 
-	Function 'def_jei': 1.1797s
-	Function 'def_prod_zoom': 1.1103s
-	Function 'bias_prod_zoom': 1.0897s
-	Function 'einsum_zoom': 1.0866s
-check sum of final matrix
-1: -75847.1488103803
-2: -75847.1488103803
-3: -75847.1488103803
-3: -75847.1488103803
+	Function 'def_jei'           : 1.1891s     Sum: 524329.8577861539
+	Function 'def_prod_zoom'     : 1.1003s     Sum: 524329.8577861539
+	Function 'bias_prod_zoom'    : 0.9639s     Sum: 524329.8577861539
+	Function 'einsum_zoom'       : 1.0585s     Sum: 524329.8577861539
 
 Spacing = 12  Going from (7, 22, 7) --> [252 242 252]
-	Function 'bias_scipy_zoom': 0.9227s
-	Function 'bias_jei_zoom': 0.4905s
-	Function 'bias_einsum_zoom': 0.5783s
-	Function 'bias_prod_zoom': 0.5371s
-check sum of final matrix
-1: 15366690.775415977
-2: 15378415.372707175
-3: 15378415.372707175
-4: 15378415.372707175
+	Function 'bias_scipy_zoom'   : 0.8746s     Sum: 15860594.336285096
+	Function 'bias_jei_zoom'     : 0.4299s     Sum: 15883114.250216981
+	Function 'bias_einsum_zoom'  : 0.4675s     Sum: 15883114.250216981
+	Function 'bias_prod_zoom'    : 0.4398s     Sum: 15883114.250216981
 
-	Function 'def_jei': 1.2436s
-	Function 'def_prod_zoom': 1.1394s
-	Function 'bias_prod_zoom': 1.1501s
-	Function 'einsum_zoom': 1.1183s
-check sum of final matrix
-1: -33641.42339675314
-2: -33641.42339675314
-3: -33641.42339675314
-3: -33641.42339675314
+	Function 'def_jei'           : 1.1910s     Sum: -109754.92574996919
+	Function 'def_prod_zoom'     : 1.1106s     Sum: -109754.92574996919
+	Function 'bias_prod_zoom'    : 1.1405s     Sum: -109754.92574996919
+	Function 'einsum_zoom'       : 1.0152s     Sum: -109754.92574996919
 

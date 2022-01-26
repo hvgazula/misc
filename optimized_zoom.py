@@ -17,7 +17,7 @@ def timer_func(func):
         t1 = time()
         result = func(*args, **kwargs)
         t2 = time()
-        print(f'\tFunction {func.__name__!r}: {(t2-t1):.4f}s')
+        print(f'\tFunction {func.__name__!r:20}: {(t2-t1):.4f}s     Sum: {np.sum(result)}')
         return result
     return wrap_func
 
@@ -286,7 +286,8 @@ def def_jei(small_def, factors):
 
 
 if __name__ == '__main__':
-    print(f'Labels Shape is: {LABELS_SHAPE}')
+    print(f'Labels Shape is: {LABELS_SHAPE}\n')
+    
     for spacing in [2, 6, 8, 10, 12]:
         print(f'Spacing = {spacing}', end=' ')
         
@@ -298,12 +299,6 @@ if __name__ == '__main__':
         bias_field_einsum = bias_einsum_zoom(small_bias, bias_factors)
         bias_field_prod = bias_prod_zoom(small_bias, bias_factors)
         
-        print('check sum of final matrix')
-        print(f"1: {np.sum(bias_field_scipy)}")
-        print(f"2: {np.sum(bias_field_jei)}")
-        print(f"3: {np.sum(bias_field_einsum)}")
-        print(f"4: {np.sum(bias_field_prod)}")
-        
         print()
 
         small_def = np.stack([small_bias, small_bias, small_bias], axis=-1)
@@ -312,10 +307,4 @@ if __name__ == '__main__':
         def_field_prod1 = bias_prod_zoom(small_def, bias_factors, 'def')
         def_field_prod2 = einsum_zoom(small_def, bias_factors, 'def')
         
-        print('check sum of final matrix')
-        print(f"1: {np.sum(def_field_jei)}")
-        print(f"2: {np.sum(def_field_prod)}")
-        print(f"3: {np.sum(def_field_prod1)}")
-        print(f"3: {np.sum(def_field_prod2)}")
-
         print()
