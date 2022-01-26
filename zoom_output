@@ -1,62 +1,122 @@
 Labels Shape is: [256, 256, 256]
 
-Spacing = 2  Going from (7, 128, 7) --> [252 256 252]
-	Function 'bias_scipy_zoom'   : 0.9282s     Sum: 16316737.533691686
-	Function 'bias_jei_zoom'     : 0.4619s     Sum: 16353262.069419479
-	Function 'bias_einsum_zoom'  : 0.4755s     Sum: 16353262.069419479
-	Function 'bias_prod_zoom'    : 0.4428s     Sum: 16353262.069419479
+Spacing = 2 	Function 'bias_scipy_zoom'   : 0.9340s     Sum: 16635335.047916146
+	Function 'bias_jei_zoom'     : 0.4568s     Sum: 16680285.29626473
+	Function 'bias_einsum_zoom'  : 0.4706s     Sum: 16680285.29626473
+	Function 'prod_zoom'         : 0.5911s     Sum: 16680285.29626473
 
-	Function 'def_scipy_zoom'    : 2.4777s     Sum: -51137.65798878018
-	Function 'def_jei'           : 1.3355s     Sum: -4258.5961548435735
-	Function 'def_prod_zoom'     : 1.2585s     Sum: -4258.5961548435735
-	Function 'bias_prod_zoom'    : 1.2404s     Sum: -4258.5961548435735
-	Function 'einsum_zoom'       : 1.2440s     Sum: -4258.5961548435735
+               scipy    for_loop    multiply      einsum
+--------  ----------  ----------  ----------  ----------
+scipy     0           2.7836e+06  2.7836e+06  2.7836e+06
+for_loop  2.7836e+06  0           0           0
+multiply  2.7836e+06  0           0           0
+einsum    2.7836e+06  0           0           0
 
-Spacing = 6  Going from (7, 43, 7) --> [252 215 252]
-	Function 'bias_scipy_zoom'   : 0.8193s     Sum: 13829394.927637724
-	Function 'bias_jei_zoom'     : 0.3978s     Sum: 13861579.047711816
-	Function 'bias_einsum_zoom'  : 0.4261s     Sum: 13861579.047711816
-	Function 'bias_prod_zoom'    : 0.3756s     Sum: 13861579.047711816
+	Function 'def_scipy_zoom'    : 2.6800s     Sum: 99483.15374484984
+	Function 'def_jei_zoom'      : 1.3366s     Sum: -87875.20985366464
+	Function 'einsum_zoom'       : 1.2577s     Sum: -87875.20985366464
+	Function 'prod_zoom'         : 1.2423s     Sum: -87875.20985366464
 
-	Function 'def_scipy_zoom'    : 2.0603s     Sum: 190406.68462543443
-	Function 'def_jei'           : 0.9822s     Sum: 209493.44826149382
-	Function 'def_prod_zoom'     : 0.8976s     Sum: 209493.44826149382
-	Function 'bias_prod_zoom'    : 1.0330s     Sum: 209493.44826149382
-	Function 'einsum_zoom'       : 1.0328s     Sum: 209493.44826149382
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            8.15075e+06  8.15075e+06  8.15075e+06
+for_loop  8.15075e+06  0            0            0
+multiply  8.15075e+06  0            0            0
+einsum    8.15075e+06  0            0            0
 
-Spacing = 8  Going from (7, 32, 7) --> [252 256 252]
-	Function 'bias_scipy_zoom'   : 0.9741s     Sum: 16385888.805152712
-	Function 'bias_jei_zoom'     : 0.5222s     Sum: 16456169.567010323
-	Function 'bias_einsum_zoom'  : 0.5989s     Sum: 16456169.567010323
-	Function 'bias_prod_zoom'    : 0.5578s     Sum: 16456169.567010323
+Spacing = 6 	Function 'bias_scipy_zoom'   : 0.8275s     Sum: 13712440.134981094
+	Function 'bias_jei_zoom'     : 0.4322s     Sum: 13716780.193810442
+	Function 'bias_einsum_zoom'  : 0.5158s     Sum: 13716780.193810442
+	Function 'prod_zoom'         : 0.4566s     Sum: 13716780.193810442
 
-	Function 'def_scipy_zoom'    : 2.5596s     Sum: -547210.1978145847
-	Function 'def_jei'           : 1.2502s     Sum: -473072.1660110754
-	Function 'def_prod_zoom'     : 1.0496s     Sum: -473072.1660110754
-	Function 'bias_prod_zoom'    : 1.0921s     Sum: -473072.1660110754
-	Function 'einsum_zoom'       : 1.2287s     Sum: -473072.1660110754
+            scipy    for_loop    multiply    einsum
+--------  -------  ----------  ----------  --------
+scipy           0      983876      983876    983876
+for_loop   983876           0           0         0
+multiply   983876           0           0         0
+einsum     983876           0           0         0
 
-Spacing = 10  Going from (7, 26, 7) --> [252 234 252]
-	Function 'bias_scipy_zoom'   : 0.8976s     Sum: 14922450.177221518
-	Function 'bias_jei_zoom'     : 0.4727s     Sum: 15029087.910443624
-	Function 'bias_einsum_zoom'  : 0.5593s     Sum: 15029087.910443624
-	Function 'bias_prod_zoom'    : 0.5217s     Sum: 15029087.910443624
+	Function 'def_scipy_zoom'    : 2.1840s     Sum: 34186.01400607087
+	Function 'def_jei_zoom'      : 1.0525s     Sum: 19135.777057322266
+	Function 'einsum_zoom'       : 1.0362s     Sum: 19135.777057322266
+	Function 'prod_zoom'         : 1.0321s     Sum: 19135.777057322266
 
-	Function 'def_scipy_zoom'    : 2.3989s     Sum: -167128.7205459966
-	Function 'def_jei'           : 1.1811s     Sum: 107112.69222954076
-	Function 'def_prod_zoom'     : 0.9314s     Sum: 107112.69222954076
-	Function 'bias_prod_zoom'    : 0.9273s     Sum: 107112.69222954076
-	Function 'einsum_zoom'       : 0.9872s     Sum: 107112.69222954076
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            2.94128e+06  2.94128e+06  2.94128e+06
+for_loop  2.94128e+06  0            0            0
+multiply  2.94128e+06  0            0            0
+einsum    2.94128e+06  0            0            0
 
-Spacing = 12  Going from (7, 22, 7) --> [252 242 252]
-	Function 'bias_scipy_zoom'   : 0.9194s     Sum: 16333344.48551414
-	Function 'bias_jei_zoom'     : 0.4900s     Sum: 16355968.805340273
-	Function 'bias_einsum_zoom'  : 0.5792s     Sum: 16355968.805340273
-	Function 'bias_prod_zoom'    : 0.5389s     Sum: 16355968.805340273
+Spacing = 8 	Function 'bias_scipy_zoom'   : 0.9820s     Sum: 16387551.430420203
+	Function 'bias_jei_zoom'     : 0.5261s     Sum: 16410254.455542492
+	Function 'bias_einsum_zoom'  : 0.6148s     Sum: 16410254.455542492
+	Function 'prod_zoom'         : 0.5597s     Sum: 16410254.455542492
 
-	Function 'def_scipy_zoom'    : 2.4636s     Sum: 1356566.4029827046
-	Function 'def_jei'           : 1.2499s     Sum: 1162449.1732335386
-	Function 'def_prod_zoom'     : 1.1537s     Sum: 1162449.1732335386
-	Function 'bias_prod_zoom'    : 0.9845s     Sum: 1162449.1732335386
-	Function 'einsum_zoom'       : 0.9921s     Sum: 1162449.1732335386
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            2.49761e+06  2.49761e+06  2.49761e+06
+for_loop  2.49761e+06  0            0            0
+multiply  2.49761e+06  0            0            0
+einsum    2.49761e+06  0            0            0
+
+	Function 'def_scipy_zoom'    : 2.5983s     Sum: -349245.6262999945
+	Function 'def_jei_zoom'      : 1.3502s     Sum: -425170.67246574466
+	Function 'einsum_zoom'       : 1.2268s     Sum: -425170.67246574466
+	Function 'prod_zoom'         : 1.2245s     Sum: -425170.67246574466
+
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            7.45025e+06  7.45025e+06  7.45025e+06
+for_loop  7.45025e+06  0            0            0
+multiply  7.45025e+06  0            0            0
+einsum    7.45025e+06  0            0            0
+
+Spacing = 10 	Function 'bias_scipy_zoom'   : 0.8986s     Sum: 14884719.88533038
+	Function 'bias_jei_zoom'     : 0.4731s     Sum: 14927744.484782234
+	Function 'bias_einsum_zoom'  : 0.5628s     Sum: 14927744.484782234
+	Function 'prod_zoom'         : 0.5223s     Sum: 14927744.484782234
+
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            1.35682e+06  1.35682e+06  1.35682e+06
+for_loop  1.35682e+06  0            0            0
+multiply  1.35682e+06  0            0            0
+einsum    1.35682e+06  0            0            0
+
+	Function 'def_scipy_zoom'    : 2.3927s     Sum: -164276.21847960248
+	Function 'def_jei_zoom'      : 1.1879s     Sum: -87258.12241342038
+	Function 'einsum_zoom'       : 1.1193s     Sum: -87258.12241342038
+	Function 'prod_zoom'         : 1.1092s     Sum: -87258.12241342038
+
+                scipy     for_loop     multiply       einsum
+--------  -----------  -----------  -----------  -----------
+scipy     0            4.04415e+06  4.04415e+06  4.04415e+06
+for_loop  4.04415e+06  0            0            0
+multiply  4.04415e+06  0            0            0
+einsum    4.04415e+06  0            0            0
+
+Spacing = 12 	Function 'bias_scipy_zoom'   : 0.9181s     Sum: 15394069.089687362
+	Function 'bias_jei_zoom'     : 0.4903s     Sum: 15390790.416230243
+	Function 'bias_einsum_zoom'  : 0.5756s     Sum: 15390790.416230243
+	Function 'prod_zoom'         : 0.5371s     Sum: 15390790.416230243
+
+            scipy    for_loop    multiply    einsum
+--------  -------  ----------  ----------  --------
+scipy           0      216128      216128    216128
+for_loop   216128           0           0         0
+multiply   216128           0           0         0
+einsum     216128           0           0         0
+
+	Function 'def_scipy_zoom'    : 2.4823s     Sum: 72187.4915599932
+	Function 'def_jei_zoom'      : 1.2237s     Sum: 61350.821181131534
+	Function 'einsum_zoom'       : 1.1577s     Sum: 61350.821181131534
+	Function 'prod_zoom'         : 1.1554s     Sum: 61350.821181131534
+
+            scipy    for_loop    multiply    einsum
+--------  -------  ----------  ----------  --------
+scipy           0      647756      647756    647756
+for_loop   647756           0           0         0
+multiply   647756           0           0         0
+einsum     647756           0           0         0
 
