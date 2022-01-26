@@ -314,7 +314,7 @@ if __name__ == '__main__':
         print(f'Spacing = {spacing}', end=' ')
         
         small_bias, bias_factors = generate_small_bias(spacing)
-        # print_shapes(small_bias, bias_factors)
+        print_shapes(small_bias, bias_factors)
         
         bias_field_scipy = bias_scipy_zoom(small_bias, bias_factors)
         bias_field_jei = bias_jei_zoom(small_bias, bias_factors)
