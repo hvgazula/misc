@@ -46,7 +46,8 @@ def generate_small_bias(spacing):
 
     small_bias = bias_field_std * np.random.uniform(
         size=[1]) * np.random.normal(size=small_bias_size)
-    factors = np.floor_divide(LABELS_SHAPE, small_bias_size)
+    # factors = np.floor_divide(LABELS_SHAPE, small_bias_size)
+    factors = bias_shape_factor
 
     return small_bias, factors
 
