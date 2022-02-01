@@ -68,19 +68,22 @@ def def_scipy_zoom(small_bias, factors):
 
 
 @timer_func
-def bias_jei_zoom(small_bias, factors, grid_mode=True):
+def bias_jei_zoom(small_bias, factors, target_shape=None, grid_mode=True):
     # return bias_field
     Sx, Sy, Sz = small_bias.shape
-    Bx, By, Bz = np.multiply(small_bias.shape, factors)
+    if target_shape is None:
+        Bx, By, Bz = np.multiply(small_bias.shape, factors).astype(int)
+    else:
+        Bx, By, Bz = target_shape
 
     I = small_bias
     A = np.zeros((Bx, Sy, Sz))
     Xs = np.arange(Bx)
-    # Xs_prime = Xs / factors[0]
     if grid_mode:
         Xs_prime = (1 - factors[0])/(2 * factors[0]) + Xs/factors[0] 
     else:
-        Xs_prime = Xs * ((Sx-1) / (Bx-1))
+        # Xs_prime = Xs * ((Sx-1) / (Bx-1))
+        Xs_prime = Xs / factors[0]
 
     f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
     c = np.minimum(f + 1, Sx - 1)
@@ -96,11 +99,11 @@ def bias_jei_zoom(small_bias, factors, grid_mode=True):
     I = A
     A = np.zeros((Bx, By, Sz))
     Ys = np.arange(By)
-    # Ys_prime = Ys / factors[1]
     if grid_mode:
         Ys_prime = (1 - factors[1])/(2 * factors[1]) + Ys/factors[1]
     else:
-        Ys_prime = Ys * ((Sy-1) / (By-1))
+        # Ys_prime = Ys * ((Sy-1) / (By-1))
+        Ys_prime = Ys / factors[1]
 
     f = np.maximum(0, np.floor(Ys_prime).astype(np.int))
     c = np.minimum(f + 1, Sy - 1)
@@ -116,11 +119,11 @@ def bias_jei_zoom(small_bias, factors, grid_mode=True):
     I = A
     A = np.zeros((Bx, By, Bz))
     Zs = np.arange(Bz)
-    # Zs_prime = Zs / factors[2]
     if grid_mode:
         Zs_prime = (1 - factors[2])/(2 * factors[2]) + Zs/factors[2]
     else:
-        Zs_prime = Zs * ((Sz-1) / (Bz-1))
+        # Zs_prime = Zs * ((Sz-1) / (Bz-1))
+        Zs_prime = Zs / factors[2]
 
     f = np.maximum(0, np.floor(Zs_prime).astype(np.int))
     c = np.minimum(f + 1, Sz - 1)
@@ -349,7 +352,21 @@ if __name__ == '__main__':
             print(f'Test Run: {test}')
             print(f'Spacing = {spacing}', end=' ')
 
-            small_bias, bias_factors = generate_small_bias(spacing)
+            # small_bias, bias_factors = generate_small_bias(spacing)
+            spacing = 13.2354234
+            # bias_factors = [0.025, 1/spacing, 0.025]
+            bias_factors = [0.022439, 1/spacing, 0.0278527]
+            
+            bias_field_std = 0.5
+            
+            small_bias = bias_field_std * np.random.uniform(size=[1]) \
+                * np.random.normal(size=np.ceil(np.multiply(LABELS_SHAPE, bias_factors)).astype(int))
+
+            bias_factors = np.divide(1.0 , bias_factors)
+
+            # result = bias_jei_zoom(small_bias, bias_factors, target_shape=LABELS_SHAPE)
+
+
 
             if test == 0:
                 print_shapes(small_bias, bias_factors)
@@ -358,7 +375,12 @@ if __name__ == '__main__':
             for func in [
                     bias_scipy_zoom, bias_jei_zoom, einsum_zoom, prod_zoom
             ]:
-                result = func(small_bias, bias_factors)
+                if func==bias_jei_zoom:
+                    result = bias_jei_zoom(small_bias, bias_factors, target_shape=LABELS_SHAPE)
+                else:
+                    continue
+                    small_bias2, bias_factors2 = generate_small_bias(spacing)
+                    result = func(small_bias2, bias_factors2)
                 bias_result_list.append(result)
 
             if test == 0:
