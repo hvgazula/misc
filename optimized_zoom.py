@@ -35,24 +35,31 @@ def generate_small_bias(spacing):
     bias_field_std = 0.5
 
     small_bias_size = np.ceil(np.multiply(LABELS_SHAPE,
-                                          bias_shape_factor)).astype(np.int)
+                                          bias_shape_factor)).astype(int)
 
     small_bias = bias_field_std * np.random.uniform(size=[1]) \
                 * np.random.normal(size=small_bias_size)
 
-    factors = np.divide(1.0, bias_shape_factor)
+    factors = np.divide(1.0, bias_shape_factor).tolist()
 
     return small_bias, factors
 
 
 @timer_func
-def scipy_zoom(small_vol, factors):
-    if small_vol.ndim == 4 and len(factors) == 3:
+def scipy_zoom(small_vol,
+               factors,
+               target_shape=None,
+               grid_mode=True,
+               flag='bias'):
+    if flag == 'def':
         factors = factors + [1]
 
-    out_vol = zoom(small_vol, factors, order=1)
+    try:
+        out_vol = zoom(small_vol, factors, order=1, grid_mode=grid_mode)
+    except:
+        out_vol = zoom(small_vol, factors, order=1)
 
-    if small_vol.ndim == 3:
+    if flag == 'bias':
         return np.exp(out_vol)
 
     return out_vol
@@ -72,7 +79,7 @@ def bias_jei_zoom(small_bias, factors, target_shape=None, grid_mode=True):
     interp_factor = (1 - factors[0]) / (2 * factors[0]) if grid_mode else 0
     Xs_prime = interp_factor + Xs / factors[0]
 
-    f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Xs_prime).astype(int))
     c = np.minimum(f + 1, Sx - 1)
 
     w2 = Xs_prime - f
@@ -87,7 +94,7 @@ def bias_jei_zoom(small_bias, factors, target_shape=None, grid_mode=True):
     Ys = np.arange(By)
     interp_factor = (1 - factors[1]) / (2 * factors[1]) if grid_mode else 0
     Ys_prime = interp_factor + Ys / factors[1]
-    f = np.maximum(0, np.floor(Ys_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Ys_prime).astype(int))
     c = np.minimum(f + 1, Sy - 1)
 
     w2 = Ys_prime - f
@@ -104,7 +111,7 @@ def bias_jei_zoom(small_bias, factors, target_shape=None, grid_mode=True):
     interp_factor = (1 - factors[2]) / (2 * factors[2]) if grid_mode else 0
     Zs_prime = interp_factor + Zs / factors[2]
 
-    f = np.maximum(0, np.floor(Zs_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Zs_prime).astype(int))
     c = np.minimum(f + 1, Sz - 1)
 
     w2 = Zs_prime - f
@@ -131,7 +138,7 @@ def bias_einsum_zoom(small_bias, factors, target_shape=None, grid_mode=True):
                                               factors[idx]) if grid_mode else 0
         Xs_prime = interp_factor + Xs / factors[idx]
 
-        f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+        f = np.maximum(0, np.floor(Xs_prime).astype(int))
         c = np.minimum(f + 1, small - 1)
 
         w2 = Xs_prime - f
@@ -169,7 +176,7 @@ def einsum_zoom(small_bias,
                                               factors[idx]) if grid_mode else 0
         Xs_prime = interp_factor + Xs / factors[idx]
 
-        f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+        f = np.maximum(0, np.floor(Xs_prime).astype(int))
         c = np.minimum(f + 1, small - 1)
 
         w2 = Xs_prime - f
@@ -216,7 +223,7 @@ def prod_zoom(small_bias,
                                               factors[idx]) if grid_mode else 0
         Xs_prime = interp_factor + Xs / factors[idx]
 
-        f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+        f = np.maximum(0, np.floor(Xs_prime).astype(int))
         c = np.minimum(f + 1, small - 1)
 
         w2 = Xs_prime - f
@@ -235,9 +242,14 @@ def prod_zoom(small_bias,
 
 
 @timer_func
-def def_prod_zoom(small_bias, factors, target_shape=None, grid_mode=True):
-    Sx, Sy, Sz = small_bias.shape
-    Bx, By, Bz = np.multiply(small_bias.shape[:-1], factors)
+def def_prod_zoom(small_bias,
+                  factors,
+                  target_shape=None,
+                  grid_mode=True,
+                  flag=None):
+    Sx, Sy, Sz = small_bias.shape[:-1]
+    Bx, By, Bz = target_shape if target_shape else np.multiply(
+        small_bias.shape[:-1], factors)
 
     I = small_bias
     for idx, (big, small) in enumerate(zip((Bx, By, Bz), (Sx, Sy, Sz))):
@@ -247,7 +259,7 @@ def def_prod_zoom(small_bias, factors, target_shape=None, grid_mode=True):
                                               factors[idx]) if grid_mode else 0
         Xs_prime = interp_factor + Xs / factors[idx]
 
-        f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+        f = np.maximum(0, np.floor(Xs_prime).astype(int))
         c = np.minimum(f + 1, small - 1)
 
         w2 = Xs_prime - f
@@ -277,7 +289,7 @@ def def_jei_zoom(small_def, factors, target_shape, grid_mode=True, flag='def'):
     interp_factor = (1 - factors[0]) / (2 * factors[0]) if grid_mode else 0
     Xs_prime = interp_factor + Xs / factors[0]
 
-    f = np.maximum(0, np.floor(Xs_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Xs_prime).astype(int))
     c = np.minimum(f + 1, Sx - 1)
 
     # w1 = c - Xs_prime
@@ -295,7 +307,7 @@ def def_jei_zoom(small_def, factors, target_shape, grid_mode=True, flag='def'):
     interp_factor = (1 - factors[1]) / (2 * factors[1]) if grid_mode else 0
     Ys_prime = interp_factor + Ys / factors[1]
 
-    f = np.maximum(0, np.floor(Ys_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Ys_prime).astype(int))
     c = np.minimum(f + 1, Sy - 1)
 
     # w1 = c - Xs_prime
@@ -313,7 +325,7 @@ def def_jei_zoom(small_def, factors, target_shape, grid_mode=True, flag='def'):
     interp_factor = (1 - factors[2]) / (2 * factors[2]) if grid_mode else 0
     Zs_prime = interp_factor + Zs / factors[2]
 
-    f = np.maximum(0, np.floor(Zs_prime).astype(np.int))
+    f = np.maximum(0, np.floor(Zs_prime).astype(int))
     c = np.minimum(f + 1, Sz - 1)
 
     # w1 = c - Xs_prime
@@ -368,29 +380,34 @@ if __name__ == '__main__':
 
             # if test == 0:
             #     print_shapes(small_bias, bias_factors)
-            print()
 
             bias_result_list = []
-            for func in [bias_jei_zoom, einsum_zoom, prod_zoom]:
+            print()
+            for func in [scipy_zoom, bias_jei_zoom, einsum_zoom, prod_zoom]:
                 result = func(small_bias,
                               bias_factors,
                               target_shape=LABELS_SHAPE)
                 bias_result_list.append(result)
 
             if test == 0:
-                print_absolute_diff_table(bias_result_list, header)
+                print_absolute_diff_table(bias_result_list[1:], header)
 
             small_def = np.stack([small_bias, small_bias, small_bias], axis=-1)
 
             def_result_list = []
-            for func in [def_jei_zoom, einsum_zoom, prod_zoom]:
+            print()
+            for func in [
+                    scipy_zoom, def_jei_zoom, einsum_zoom, def_prod_zoom,
+                    prod_zoom
+            ]:
                 result = func(small_def,
                               bias_factors,
-                              target_shape=LABELS_SHAPE, flag='def')
+                              target_shape=LABELS_SHAPE,
+                              flag='def')
                 def_result_list.append(result)
 
-            # if test == 0:
-            #     print_absolute_diff_table(def_list, header)
+            if test == 0:
+                print_absolute_diff_table(def_result_list[1:], header)
 
             # save_images(bias_result_list, test, header, spacing, 'bias')
             # save_images(def_list, test, header, spacing, 'deformation')
